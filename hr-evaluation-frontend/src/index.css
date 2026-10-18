@@ -1,0 +1,15 @@
+:root {
+  font-family: "Meiryo", sans-serif;
+  font-size: 16px;
+  color: #1f2937;
+  background-color: #f3f6fb;
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+}

@@ -1,0 +1,125 @@
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+main {
+  width: calc(100% - 32px);
+  max-width: 640px;
+  margin: 32px auto;
+  padding: 24px;
+  background-color: white;
+  border: 1px solid #d9e2ef;
+  border-radius: 12px;
+  box-sizing: border-box;
+}
+
+.field {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.field select {
+  width: 220px;
+  padding: 8px;
+  font-size: 16px;
+}
+
+main h1 {
+  background-color: #17365d;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+.period {
+  background-color: #eaf0ff;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.actions button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.save-button {
+  background-color: #1d4ed8;
+}
+
+.calculate-button {
+  background-color: #0f766e;
+}
+
+.actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+main h2 {
+  font-size: 16px;
+  margin: 20px 0 12px;
+}
+
+.role-note {
+  background-color: #fff8e8;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.results-table th,
+.results-table td {
+  border: 1px solid #d9e2ef;
+  padding: 8px;
+  text-align: left;
+}
+
+.results-table th {
+  background-color: #eaf0ff;
+}
+
+.results-description {
+  background-color: #effaf3;
+  padding: 10px;
+  border-radius: 6px;
+}
+
+.results-toolbar {
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0;
+}
+
+.results-toolbar .period {
+  flex: 1;
+  margin: 0;
+}
+
+.return-button {
+  background-color: #475569;
+}
+
+.results-rule {
+  border: 1px solid #d9e2ef;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.delete-button {
+  background-color: #b91c1c;
+}

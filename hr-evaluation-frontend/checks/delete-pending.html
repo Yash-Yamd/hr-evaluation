@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>削除中と失敗後の動作確認</title>
+  </head>
+  <body style="display:block;margin:0;min-height:100vh">
+    <aside style="background:#fff8dc;border:2px solid #765b00;padding:12px;font-family:sans-serif">
+      <strong>動作確認専用：社員・通信はすべて仮のものです。実データは変更しません。</strong>
+      <p>社員を選択 → 下の確認欄にチェック →「評価を削除」→ 待機状態を確認 → 通信失敗を再現。</p>
+      <label><input id="confirm-ok" type="checkbox" /> この確認専用ページでは確認画面の「OK」を仮に選ぶ</label>
+      <button id="release-failure" type="button" disabled>通信失敗の返事を返す</button>
+      <span id="test-status" role="status">削除の依頼を待っています</span>
+    </aside>
+    <div id="root"></div>
+    <script type="module">
+      import React, { StrictMode } from "react";
+      import { createRoot } from "react-dom/client";
+      import App from "/src/App.jsx";
+      import "/src/index.css";
+
+      const employee = {
+        employeeId: 3,
+        departmentName: "確認用部署",
+        lastName: "確認用",
+        firstName: "社員",
+      };
+      const evaluation = {
+        employeeId: 3,
+        practicalSkillScore: 2,
+        problemSolvingScore: 3,
+        logicalThinkingScore: 5,
+        communicationScore: 3,
+        goalAchievementScore: 4,
+      };
+      const releaseButton = document.getElementById("release-failure");
+      const testStatus = document.getElementById("test-status");
+      let rejectPending;
+
+      // 確認画面の操作は別途確認済み。このページでは途中状態だけを調べる。
+      window.confirm = () => document.getElementById("confirm-ok").checked;
+
+      // このページ内の通信を置き換え、本物の保存・削除先へ送信しない。
+      window.fetch = async (input, options = {}) => {
+        const url = new URL(input instanceof Request ? input.url : input, location.href);
+        const method = (options.method || (input instanceof Request ? input.method : "GET")).toUpperCase();
+        if (method === "GET" && url.pathname === "/api/employees") {
+          return Response.json([employee]);
+        }
+        if (method === "GET" && url.pathname === "/api/evaluations/3") {
+          return Response.json(evaluation);
+        }
+        if (method === "DELETE" && url.pathname === "/api/evaluations/3") {
+          if (rejectPending) throw new Error("確認用の削除依頼が重複しました");
+          testStatus.textContent = "削除の返事を保留中：途中の画面を確認できます";
+          releaseButton.disabled = false;
+          return new Promise((resolve, reject) => { rejectPending = reject; });
+        }
+        throw new Error(`確認用ページで未対応の通信を止めました：${method} ${url.pathname}`);
+      };
+
+      releaseButton.addEventListener("click", () => {
+        if (!rejectPending) return;
+        const reject = rejectPending;
+        rejectPending = undefined;
+        releaseButton.disabled = true;
+        testStatus.textContent = "通信失敗を再現しました：解除後の画面を確認してください";
+        reject(new TypeError("動作確認用の通信失敗"));
+      });
+
+      createRoot(document.getElementById("root")).render(
+        React.createElement(StrictMode, null, React.createElement(App)),
+      );
+    </script>
+  </body>
+</html>
